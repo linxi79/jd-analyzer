@@ -26,12 +26,12 @@ def test_analyze_returns_model_text_and_passes_params() -> None:
         MagicMock(message=MagicMock(content="四块分析结果"))
     ]
 
-    result = analyze(fake_client, "some jd", model="deepseek-chat")
+    result = analyze(fake_client, "some jd", model="deepseek-v4-pro")
 
     assert result == "四块分析结果"
     fake_client.chat.completions.create.assert_called_once()
     kwargs = fake_client.chat.completions.create.call_args.kwargs
-    assert kwargs["model"] == "deepseek-chat"
+    assert kwargs["model"] == "deepseek-v4-pro"
     assert kwargs["messages"][0]["role"] == "system"
     assert kwargs["messages"][1]["role"] == "user"
 
