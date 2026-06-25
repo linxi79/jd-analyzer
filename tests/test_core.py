@@ -16,7 +16,6 @@ def test_build_prompt_includes_jd_and_candidate() -> None:
 
 
 def test_build_prompt_strips_whitespace() -> None:
-    # 首尾空白应被去掉
     assert "  hi  " not in build_prompt("  hi  ")
 
 
@@ -37,7 +36,6 @@ def test_analyze_returns_model_text_and_passes_params() -> None:
 
 
 def test_analyze_handles_empty_content() -> None:
-    # 模型返回 None 时应安全地变成空字符串，而不是崩溃
     fake_client = MagicMock()
     fake_client.chat.completions.create.return_value.choices = [
         MagicMock(message=MagicMock(content=None))

@@ -14,7 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from . import __version__
-from .core import DEFAULT_MODEL, analyze, create_client
+from .core import DEFAULT_CANDIDATE, DEFAULT_MODEL, analyze, create_client
 
 
 def read_jd(path: Path) -> str:
@@ -40,10 +40,12 @@ def main(argv: list[str] | None = None) -> int:
         help="JD 文本文件路径（默认：当前目录的 jd.txt）",
     )
     parser.add_argument("--model", default=DEFAULT_MODEL, help=f"模型名（默认 {DEFAULT_MODEL}）")
+    parser.add_argument(
+        "--candidate", default=DEFAULT_CANDIDATE, help=f"背景（默认 {DEFAULT_CANDIDATE}）"
+    )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     args = parser.parse_args(argv)
 
-    # 从 .env 加载环境变量，再读密钥
     load_dotenv()
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
@@ -60,7 +62,7 @@ def main(argv: list[str] | None = None) -> int:
 
     client = create_client(api_key)
     print(f"正在用 {args.model} 分析 {args.jd_file} ...\n", file=sys.stderr)
-    print(analyze(client, jd_text, model=args.model))
+    print(analyze(client, jd_text, model=args.model, candidate=args.candidate), file=sys.stdout)
     return 0
 
 
